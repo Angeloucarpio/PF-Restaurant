@@ -1,0 +1,28 @@
+nav.navbar {
+    display: flex
+;
+    justify-content: center;
+    padding: 0px;
+    background-color: #ababab;
+    width: auto;
+    border-radius: 10px;
+}
+img.logout {
+    margin-left: 1470px;
+    width: 28px;
+}
+img.category {
+    width: 28px;
+    position: absolute;
+    left: 800px;
+}
+img.home {
+    width: 28px;
+    position: absolute;
+    left: 760px;
+}
+img.notification {
+    width: 28px;
+    position: absolute;
+    left: 840px;
+}

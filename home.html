@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foody - Experience Food</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f3f0f0;
+  color: #1a1a1a;
+  padding: 2rem;
+}
+
+.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #222;
+}
+
+.sign-up-btn {
+  background-color: #e53935;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-text {
+  max-width: 500px;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1rem;
+}
+
+.buttons button {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.buttons .view-menu {
+  background-color: #e53935;
+  color: white;
+}
+
+.buttons .book-table {
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.reviews {
+  margin-top: 1rem;
+}
+
+.reviews img {
+  width: 39px;
+  border-radius: 50%;
+  margin-right: 0.2rem;
+  height: 36px;
+}
+
+.rating {
+  margin-top: 0.5rem;
+  color: orange;
+  font-size: 22px;
+}
+
+.hero-image img {
+  max-width: 100%;
+  border-radius: 20px;
+}
+
+.dishes {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.dish-card {
+  min-width: 200px;
+  background: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.dish-card img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.dish-name {
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.dish-price {
+  color: #e53935;
+}
+
+/* Overlay */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: none;
+  z-index: 999;
+}
+
+/* Modal Shared Styles */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal h2 {
+  color: #e53935;
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal label {
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+
+.modal select,
+.modal input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.modal button {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+/* Preview Section in Modal */
+#food-preview img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#food-preview {
+  margin-bottom: 1rem;
+}
+
+/* Order Summary */
+.order-summary {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.order-summary li {
+  margin-bottom: 0.5rem;
+}
+
+  </style>
+</head>
+<body>
+  <div id="main-content">
+    <header>
+      <div class="logo">FH</div>
+      <nav>
+        <a href="home.html">Home</a>
+        <a href="category.html">Menu</a>
+        <a href="nofitication.html">Notification</a>
+      </nav>
+      <a href="index.html"><button class="sign-up-btn">Logout</button></a>
+    </header>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h1>It’s not just Food, It’s an Experience.</h1>
+        <div class="buttons">
+          <button class="view-menu" id="view-history-btn">View Menu</button>
+          <button class="book-table" id="book-table-btn">Book A Table</button>
+        </div>
+        <div class="reviews">
+          <img src="man1.jpg" />
+          <img src="man2.jpg" />
+          <img src="man3.jpg" />
+          <span class="rating">★★★★★</span>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="cake.jpg" alt="food" />
+      </div>
+    </section>
+
+    <section class="dishes">
+      <div class="dish-card">
+        <img src="coff.jpg" alt="coffee" />
+        <div class="dish-name">Coffee</div>
+        <div class="dish-desc">Americano</div>
+        <div class="dish-price">$35.00</div>
+      </div>
+      <div class="dish-card">
+        <img src="milktea.jpg" alt="milktea" />
+        <div class="dish-name">Milktea</div>
+        <div class="dish-desc">Panda Pearl</div>
+        <div class="dish-price">$35.00</div>
+      </div>
+      <div class="dish-card">
+        <img src="vegetable.jpg" alt="vegetables" />
+        <div class="dish-name">Vegetables</div>
+        <div class="dish-desc">Kare-Kare</div>
+        <div class="dish-price">$35.00</div>
+      </div>
+      <div class="dish-card">
+        <img src="meat.jpg" alt="meat" />
+        <div class="dish-name">Meat</div>
+        <div class="dish-desc">Adobo</div>
+        <div class="dish-price">$35.00</div>
+      </div>
+    </section>
+  </div>
+<!-- Overlay -->
+<div id="overlay"></div>
+
+<!-- Food Selection Modal -->
+<section id="food-selection-modal" class="modal">
+  <div class="payment-method-container">
+    <h2>Food Selection</h2>
+    <form id="food-order-form">
+      <div>
+        <label for="size">Size:</label>
+        <select id="size">
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+        </select>
+      </div>
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1" />
+      </div>
+      <button type="button" id="add-payment-btn">Proceed to Payment</button>
+    </form>
+  </div>
+</section>
+
+<!-- Payment Method Modal -->
+<section id="payment-method-modal" class="modal">
+  <div class="payment-method-container">
+    <h2>Select Payment Method</h2>
+    <form id="payment-form">
+      <label for="payment-method">Payment Method</label>
+      <select id="payment-method">
+        <option value="cash">Cash</option>
+        <option value="gcash">Gcash</option>
+        <option value="paymaya">Paymaya</option>
+      </select>
+      <div id="payment-inputs"></div>
+      <button id="order-now-btn" type="submit">Order Now</button>
+    </form>
+  </div>
+</section>
+
+<!-- Review Modal -->
+<section id="review-modal" class="modal">
+  <div class="review-container">
+    <h2>Review Your Order</h2>
+    <ul id="order-summary" class="order-summary"></ul>
+    <button id="confirm-btn">Confirm</button>
+  </div>
+</section>
+
+  <script>
+   const foodCards = document.querySelectorAll('.dish-card');
+const foodSelectionModal = document.getElementById('food-selection-modal');
+const paymentMethodModal = document.getElementById('payment-method-modal');
+const reviewModal = document.getElementById('review-modal');
+const overlay = document.getElementById('overlay');
+const dishesSection = document.querySelector('.dishes');
+const foodOrderForm = document.getElementById('food-order-form');
+const foodOrderSummary = document.getElementById('order-summary');
+const addPaymentBtn = document.getElementById('add-payment-btn');
+const paymentMethodSelect = document.getElementById('payment-method');
+const paymentInputsContainer = document.getElementById('payment-inputs');
+const orderNowBtn = document.getElementById('order-now-btn');
+const confirmBtn = document.getElementById('confirm-btn');
+
+// Display food selection modal
+let currentFood = {};
+
+const modalHeader = foodSelectionModal.querySelector('h2');
+const modalPreview = document.createElement('div');
+modalPreview.id = 'food-preview';
+modalPreview.style.marginBottom = '1rem';
+foodSelectionModal.querySelector('.payment-method-container').insertBefore(modalPreview, foodOrderForm);
+
+foodCards.forEach(card => {
+  card.addEventListener('click', () => {
+    currentFood = {
+      name: card.querySelector('.dish-name').textContent,
+      price: card.querySelector('.dish-price').textContent,
+      image: card.querySelector('img').src,
+    };
+
+    modalHeader.textContent = `Order: ${currentFood.name}`;
+    modalPreview.innerHTML = `
+      <img src="${currentFood.image}" alt="${currentFood.name}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+      <strong>Price:</strong> ${currentFood.price}
+    `;
+
+    dishesSection.classList.add('blurred');
+    foodSelectionModal.classList.add('active');
+    overlay.style.display = 'block';
+  });
+});
+
+// Close all modals on overlay click
+overlay.addEventListener('click', closeModals);
+
+function closeModals() {
+  [foodSelectionModal, paymentMethodModal, reviewModal].forEach(modal => modal.classList.remove('active'));
+  overlay.style.display = 'none';
+  dishesSection.classList.remove('blurred');
+}
+
+// Proceed to payment
+addPaymentBtn.addEventListener('click', () => {
+  foodSelectionModal.classList.remove('active');
+  paymentMethodModal.classList.add('active');
+});
+
+// Show fields based on payment method
+paymentMethodSelect.addEventListener('change', handlePaymentInput);
+handlePaymentInput(); // default load
+
+function handlePaymentInput() {
+  const method = paymentMethodSelect.value;
+  if (method === 'cash') {
+    paymentInputsContainer.innerHTML = `
+      <label for="cash-amount">Amount</label>
+      <input type="number" id="cash-amount" placeholder="Enter amount" required>
+    `;
+  } else {
+    paymentInputsContainer.innerHTML = `
+      <label for="payment-username">Username</label>
+      <input type="text" id="payment-username" placeholder="Enter username" required>
+      <label for="payment-phone">Phone Number</label>
+      <input type="tel" id="payment-phone" placeholder="09XXXXXXXXX" required>
+    `;
+  }
+}
+
+// Submit order and review
+orderNowBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  const size = foodOrderForm.querySelector('#size').value;
+  const quantity = foodOrderForm.querySelector('#quantity').value;
+  const totalPrice = (parseFloat(currentFood.price.replace('$', '')) * quantity).toFixed(2);
+
+  foodOrderSummary.innerHTML = `
+    <li><span>Food:</span> ${currentFood.name}</li>
+    <li><span>Size:</span> ${size}</li>
+    <li><span>Quantity:</span> ${quantity}</li>
+    <li><span>Total:</span> $${totalPrice}</li>
+    <li><span>Payment:</span> ${paymentMethodSelect.value}</li>
+  `;
+
+  paymentMethodModal.classList.remove('active');
+  reviewModal.classList.add('active');
+});
+
+// Final confirmation
+confirmBtn.addEventListener('click', () => {
+  alert('Order confirmed! Thank you!');
+  closeModals();
+});
+  </script>  
+</body>
+</html>
