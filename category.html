@@ -170,6 +170,18 @@ button {
 button:hover {
   background-color: #d32f2f;
 }
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 1rem;
+}
+
+.scroll-container .menu-card {
+  display: inline-block;
+  width: 250px;
+  vertical-align: top;
+  margin-right: 1rem;
+}
 
 /* Apply Blur Effect to Background */
 .blurred {
@@ -319,14 +331,14 @@ button:hover {
       <a href="#">Contact</a>
     </nav>
   </header>
-
   <section class="menu-section">
     <h2>Our Menu</h2>
-
+  
+    <!-- Coffee -->
     <div class="category">Coffee</div>
-    <div class="menu-items">
+    <div class="scroll-container">
       <div class="menu-card">
-        <img src="coff.jpg" alt="Pappardelle">
+        <img src="coff.jpg" alt="Cappuccino">
         <div class="menu-name">Cappuccino</div>
         <div class="menu-desc">Smooth espresso with steamed milk</div>
         <div class="menu-price">$5.00</div>
@@ -337,16 +349,29 @@ button:hover {
         <div class="menu-desc">Espresso with milk and foam</div>
         <div class="menu-price">$5.50</div>
       </div>
+      <div class="menu-card">
+        <img src="coff.jpg" alt="Mocha">
+        <div class="menu-name">Mocha</div>
+        <div class="menu-desc">Espresso with chocolate and milk</div>
+        <div class="menu-price">$5.75</div>
+      </div>
+      <div class="menu-card">
+        <img src="coff.jpg" alt="Americano">
+        <div class="menu-name">Americano</div>
+        <div class="menu-desc">Espresso with hot water</div>
+        <div class="menu-price">$4.00</div>
+      </div>
+      <div class="menu-card">
+        <img src="coff.jpg" alt="Caramel Macchiato">
+        <div class="menu-name">Caramel Macchiato</div>
+        <div class="menu-desc">Espresso with caramel and steamed milk</div>
+        <div class="menu-price">$6.00</div>
+      </div>
     </div>
-    <div class="menu-card">
-      <img src="coff.jpg" alt="Latte">
-      <div class="menu-name">Latte</div>
-      <div class="menu-desc">Espresso with milk and foam</div>
-      <div class="menu-price">$5.50</div>
-    </div>
-  </div>
+  
+    <!-- Milk Tea -->
     <div class="category">Milk Tea</div>
-    <div class="menu-items">
+    <div class="scroll-container">
       <div class="menu-card">
         <img src="milktea.jpg" alt="Classic Milk Tea">
         <div class="menu-name">Classic Milk Tea</div>
@@ -359,48 +384,95 @@ button:hover {
         <div class="menu-desc">Sweet and nutty purple taro</div>
         <div class="menu-price">$5.00</div>
       </div>
+      <div class="menu-card">
+        <img src="milktea.jpg" alt="Wintermelon Milk Tea">
+        <div class="menu-name">Wintermelon Milk Tea</div>
+        <div class="menu-desc">Rich and smooth wintermelon flavor</div>
+        <div class="menu-price">$4.75</div>
+      </div>
+      <div class="menu-card">
+        <img src="milktea.jpg" alt="Matcha Milk Tea">
+        <div class="menu-name">Matcha Milk Tea</div>
+        <div class="menu-desc">Earthy green tea with creamy milk</div>
+        <div class="menu-price">$5.25</div>
+      </div>
+      <div class="menu-card">
+        <img src="milktea.jpg" alt="Strawberry Milk Tea">
+        <div class="menu-name">Strawberry Milk Tea</div>
+        <div class="menu-desc">Fruity and refreshing with tapioca pearls</div>
+        <div class="menu-price">$5.00</div>
+      </div>
     </div>
-
+  
+    <!-- Dessert -->
     <div class="category">Dessert</div>
-    <div class="menu-items">
+    <div class="scroll-container">
       <div class="menu-card">
         <img src="cake.jpg" alt="Cheesecake">
         <div class="menu-name">Cheesecake</div>
-        <div class="menu-desc">Classic New York style cheesecake</div>
+        <div class="menu-desc">Classic New York-style creamy cheesecake</div>
         <div class="menu-price">$6.00</div>
       </div>
       <div class="menu-card">
-        <img src="cake.jpg" alt="Brownie">
-        <div class="menu-name">Brownie</div>
-        <div class="menu-desc">Rich chocolate brownie with nuts</div>
-        <div class="menu-price">$4.00</div>
+        <img src="cake.jpg" alt="Chocolate Lava Cake">
+        <div class="menu-name">Chocolate Lava Cake</div>
+        <div class="menu-desc">Warm cake with gooey chocolate center</div>
+        <div class="menu-price">$6.50</div>
+      </div>
+      <div class="menu-card">
+        <img src="cake.jpg" alt="Tiramisu">
+        <div class="menu-name">Tiramisu</div>
+        <div class="menu-desc">Coffee-flavored layered Italian dessert</div>
+        <div class="menu-price">$6.75</div>
+      </div>
+      <div class="menu-card">
+        <img src="cake.jpg" alt="Red Velvet Cake">
+        <div class="menu-name">Red Velvet Cake</div>
+        <div class="menu-desc">Moist red cake with cream cheese frosting</div>
+        <div class="menu-price">$6.25</div>
+      </div>
+      <div class="menu-card">
+        <img src="cake.jpg" alt="Blueberry Tart">
+        <div class="menu-name">Blueberry Tart</div>
+        <div class="menu-desc">Tart shell filled with custard and berries</div>
+        <div class="menu-price">$5.80</div>
       </div>
     </div>
-
-    <div class="category">Food</div>
-    <div class="menu-items">
-      <div class="menu-card">
-        <img src="meat.jpg" alt="Pappardelle">
-        <div class="menu-name">Pappardelle</div>
-        <div class="menu-desc">Rich tomato sauce with fresh vegetables</div>
-        <div class="menu-price">$35.00</div>
-      </div>
-      <div class="menu-card">
-        <img src="meat.jpg" alt="Ravioli Stuffed">
-        <div class="menu-name">Ravioli Stuffed</div>
-        <div class="menu-desc">Filled with creamy cheese and pesto sauce</div>
-        <div class="menu-price">$35.00</div>
-      </div>
-      <div class="menu-card">
-        <img src="meat.jpg" alt="Lasagna">
-        <div class="menu-name">Lasagna</div>
-        <div class="menu-desc">Layered pasta with meat sauce and cheese</div>
-        <div class="menu-price">$30.00</div>
-      </div>
-    </div>
+    <!-- Food -->
+<div class="category">Food</div>
+<div class="scroll-container">
+  <div class="menu-card">
+    <img src="food.jpg" alt="Spaghetti Bolognese">
+    <div class="menu-name">Spaghetti Bolognese</div>
+    <div class="menu-desc">Pasta with rich beef and tomato sauce</div>
+    <div class="menu-price">$8.00</div>
+  </div>
+  <div class="menu-card">
+    <img src="food.jpg" alt="Chicken Sandwich">
+    <div class="menu-name">Chicken Sandwich</div>
+    <div class="menu-desc">Grilled chicken with lettuce and mayo</div>
+    <div class="menu-price">$6.50</div>
+  </div>
+  <div class="menu-card">
+    <img src="food.jpg" alt="Beef Burger">
+    <div class="menu-name">Beef Burger</div>
+    <div class="menu-desc">Juicy grilled beef patty with cheese</div>
+    <div class="menu-price">$7.25</div>
+  </div>
+  <div class="menu-card">
+    <img src="food.jpg" alt="Fries & Dip">
+    <div class="menu-name">Fries & Dip</div>
+    <div class="menu-desc">Crispy fries with your choice of dip</div>
+    <div class="menu-price">$3.50</div>
+  </div>
+  <div class="menu-card">
+    <img src="food.jpg" alt="Chicken Nuggets">
+    <div class="menu-name">Chicken Nuggets</div>
+    <div class="menu-desc">Golden-brown crispy nuggets</div>
+    <div class="menu-price">$4.75</div>
+  </div>
+</div>
   </section>
-
-
   <section id="food-selection-modal" class="modal">
     <div id="food-selection-container" class="food-selection-container">
       <div id="food-details">
