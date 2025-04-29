@@ -497,30 +497,18 @@ button:hover {
           
 </div>
   </section>
-  <section id="food-selection-modal" class="modal">
+ <section id="food-selection-modal" class="modal">
     <div id="food-selection-container" class="food-selection-container">
-      <div id="food-details">
-        <img id="food-img" src="" alt="">
-        <h3 id="food-name"></h3>
-        <p id="food-price"></p>
+        <div id="food-details">
+            </div>
         <form id="food-order-form">
-          <label for="full-name">Full Name:</label>
-          <input type="text" id="full-name" required>                    
-          <label for="size">Size:</label>
-          <select id="size" required>
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-          </select>
-          
-          <label for="quantity">Quantity:</label>
-          <input type="number" id="quantity" value="1" required>
-          
-          <button type="submit" id="add-payment-btn">Add Payment</button>
+            <label for="full-name">Full Name:</label>
+            <input type="text" id="full-name" required>
+
+            <button type="button" id="add-payment-btn">Add Payment</button>
         </form>
-      </div>
     </div>
-  </section>
+</section>
 
 <section id="payment-method-modal" class="modal">
     <div id="payment-method-container" class="payment-method-container">
@@ -561,6 +549,9 @@ const paymentInputsContainer = document.getElementById('payment-inputs');
 const orderNowBtn = document.getElementById('order-now-btn');
 const confirmBtn = document.getElementById('confirm-btn');
 const fullNameInput = document.getElementById('full-name');
+const ageInput = document.getElementById('age'); // Added age input
+const sizeSelect = document.getElementById('size'); // Added size select
+const quantityInput = document.getElementById('quantity'); // Added quantity input
 const foodDetailsContainer = document.getElementById('food-details');
 
 let cart = [];
@@ -660,7 +651,6 @@ overlay.addEventListener('click', () => {
     overlay.style.display = 'none';
     menuSection.classList.remove('blurred');
 });
-
 addPaymentBtn.addEventListener('click', (e) => {
     const fullName = fullNameInput.value;
 
@@ -676,7 +666,6 @@ addPaymentBtn.addEventListener('click', (e) => {
     foodSelectionModal.style.display = 'none';
     paymentMethodModal.style.display = 'flex';
 });
-
 paymentMethodSelect.addEventListener('change', () => {
     const method = paymentMethodSelect.value;
     paymentInputsContainer.innerHTML = ''; // Clear previous inputs
@@ -801,6 +790,12 @@ confirmBtn.addEventListener('click', () => {
     // Optionally, you can reset the form and other UI elements here
     if (fullNameInput) {
         fullNameInput.value = '';
+    }
+    if (sizeSelect) {
+        sizeSelect.value = 'small';
+    }
+    if (quantityInput) {
+        quantityInput.value = '1';
     }
     if (paymentInputsContainer) {
         paymentInputsContainer.innerHTML = '';
