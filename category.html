@@ -308,7 +308,10 @@ button:hover {
   transition: opacity 0.3s ease;
 }
 
-
+ .selected {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+  }
     .blurred {
       filter: blur(5px);
     }
@@ -342,30 +345,35 @@ button:hover {
         <div class="menu-name">Cappuccino</div>
         <div class="menu-desc">Smooth espresso with steamed milk</div>
         <div class="menu-price">$5.00</div>
+          <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="black-coffe.avif" alt="Latte">
         <div class="menu-name">Latte</div>
         <div class="menu-desc">Espresso with milk and foam</div>
         <div class="menu-price">$5.50</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="brown-coffee.jpg" alt="Mocha">
         <div class="menu-name">Mocha</div>
         <div class="menu-desc">Espresso with chocolate and milk</div>
         <div class="menu-price">$5.75</div>
+                 <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="Spanish Coffe.jpg" alt="Americano">
         <div class="menu-name">Americano</div>
         <div class="menu-desc">Espresso with hot water</div>
         <div class="menu-price">$4.00</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="matcha coffee.jpg" alt="Caramel Macchiato">
         <div class="menu-name">Caramel Macchiato</div>
         <div class="menu-desc">Espresso with caramel and steamed milk</div>
         <div class="menu-price">$6.00</div>
+                <button type="button" onclick="selectItem(this)">Select</button>
       </div>
     </div>
   
@@ -377,30 +385,35 @@ button:hover {
         <div class="menu-name">Classic Milk Tea</div>
         <div class="menu-desc">Black tea with creamy milk</div>
         <div class="menu-price">$4.50</div>
+                 <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="Coco-Milk-Tea-3.jpg" alt="Taro Milk Tea">
         <div class="menu-name">Taro Milk Tea</div>
         <div class="menu-desc">Sweet and nutty purple taro</div>
         <div class="menu-price">$5.00</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="honey-milktea.jpg" alt="Wintermelon Milk Tea">
         <div class="menu-name">Wintermelon Milk Tea</div>
         <div class="menu-desc">Rich and smooth wintermelon flavor</div>
         <div class="menu-price">$4.75</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="panda-milktea.webp" alt="Matcha Milk Tea">
         <div class="menu-name">Matcha Milk Tea</div>
         <div class="menu-desc">Earthy green tea with creamy milk</div>
         <div class="menu-price">$5.25</div>
+                 <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="mango-milktea.webp" alt="Strawberry Milk Tea">
         <div class="menu-name">Strawberry Milk Tea</div>
         <div class="menu-desc">Fruity and refreshing with tapioca pearls</div>
         <div class="menu-price">$5.00</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
     </div>
   
@@ -412,30 +425,35 @@ button:hover {
         <div class="menu-name">Cheesecake</div>
         <div class="menu-desc">Classic New York-style creamy cheesecake</div>
         <div class="menu-price">$6.00</div>
+                   <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="CHOCOLATE-FUDGE-CAKE-24-S-11.jpg" alt="Chocolate Lava Cake">
         <div class="menu-name">Chocolate Lava Cake</div>
         <div class="menu-desc">Warm cake with gooey chocolate center</div>
         <div class="menu-price">$6.50</div>
+                   <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="japanese-cake.jpg" alt="Tiramisu">
         <div class="menu-name">Tiramisu</div>
         <div class="menu-desc">Coffee-flavored layered Italian dessert</div>
         <div class="menu-price">$6.75</div>
+                 <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="No-bake-cheesecake_8.webp" alt="Red Velvet Cake">
         <div class="menu-name">Red Velvet Cake</div>
         <div class="menu-desc">Moist red cake with cream cheese frosting</div>
         <div class="menu-price">$6.25</div>
+                   <button type="button" onclick="selectItem(this)">Select</button>
       </div>
       <div class="menu-card">
         <img src="Citrus-Chiffon-312JBweb.jpg" alt="Blueberry Tart">
         <div class="menu-name">Blueberry Tart</div>
         <div class="menu-desc">Tart shell filled with custard and berries</div>
         <div class="menu-price">$5.80</div>
+                  <button type="button" onclick="selectItem(this)">Select</button>
       </div>
     </div>
     <!-- Food -->
@@ -446,31 +464,37 @@ button:hover {
     <div class="menu-name">Spaghetti Bolognese</div>
     <div class="menu-desc">Pasta with rich beef and tomato sauce</div>
     <div class="menu-price">$8.00</div>
+              <button type="button" onclick="selectItem(this)">Select</button>>
   </div>
   <div class="menu-card">
     <img src="food2.jpg" alt="Chicken Sandwich">
     <div class="menu-name">Chicken Sandwich</div>
     <div class="menu-desc">Grilled chicken with lettuce and mayo</div>
     <div class="menu-price">$6.50</div>
+             <button type="button"> Select</button>
   </div>
   <div class="menu-card">
     <img src="food3.webp" alt="Beef Burger">
     <div class="menu-name">Beef Burger</div>
     <div class="menu-desc">Juicy grilled beef patty with cheese</div>
     <div class="menu-price">$7.25</div>
+              <button type="button" onclick="selectItem(this)">Select</button>
   </div>
   <div class="menu-card">
     <img src="food4.jpg" alt="Fries & Dip">
     <div class="menu-name">Fries & Dip</div>
     <div class="menu-desc">Crispy fries with your choice of dip</div>
     <div class="menu-price">$3.50</div>
+              <button type="button" onclick="selectItem(this)">Select</button>
   </div>
   <div class="menu-card">
     <img src="food4.png" alt="Chicken Nuggets">
     <div class="menu-name">Chicken Nuggets</div>
     <div class="menu-desc">Golden-brown crispy nuggets</div>
     <div class="menu-price">$4.75</div>
+             <button type="button" onclick="selectItem(this)">Select</button>
   </div>
+          
 </div>
   </section>
   <section id="food-selection-modal" class="modal">
@@ -523,115 +547,248 @@ button:hover {
     </div>
   </section>
   
-
+<button onclick="showCart(this)">Get Order</button>
 
   <div id="overlay"></div>
-  <script>
-    const foodCategoryCards = document.querySelectorAll('.menu-card');
-    const foodSelectionModal = document.getElementById('food-selection-modal');
-    const paymentMethodModal = document.getElementById('payment-method-modal');
-    const reviewModal = document.getElementById('review-modal');
-    const overlay = document.getElementById('overlay');
-    const body = document.body;
-    const menuSection = document.querySelector('.menu-section');  // Added this line
-    const foodNameDisplay = document.getElementById('food-name');
-    const foodPriceDisplay = document.getElementById('food-price');
-    const foodImageDisplay = document.getElementById('food-img');
-    const foodOrderForm = document.getElementById('food-order-form');
-    const foodOrderSummary = document.getElementById('order-summary');
-    const addPaymentBtn = document.getElementById('add-payment-btn');
-    const paymentMethodSelect = document.getElementById('payment-method');
-    const paymentInputsContainer = document.getElementById('payment-inputs');
-    const orderNowBtn = document.getElementById('order-now-btn');
-    const confirmBtn = document.getElementById('confirm-btn');
-  
-    let currentFood = {};
-  
+<script>
+const foodCategoryCards = document.querySelectorAll('.menu-card');
+const foodSelectionModal = document.getElementById('food-selection-modal');
+const paymentMethodModal = document.getElementById('payment-method-modal');
+const reviewModal = document.getElementById('review-modal');
+const overlay = document.getElementById('overlay');
+const body = document.body;
+const menuSection = document.querySelector('.menu-section');
+const foodOrderSummary = document.getElementById('order-summary');
+const addPaymentBtn = document.getElementById('add-payment-btn');
+const paymentMethodSelect = document.getElementById('payment-method');
+const paymentInputsContainer = document.getElementById('payment-inputs');
+const orderNowBtn = document.getElementById('order-now-btn');
+const confirmBtn = document.getElementById('confirm-btn');
+const fullNameInput = document.getElementById('full-name');
 
-    foodCategoryCards.forEach(card => {
-      card.addEventListener('click', () => {
-        currentFood = {
-          name: card.querySelector('.menu-name').textContent,
-          price: card.querySelector('.menu-price').textContent,
-          image: card.querySelector('img').src,
-        };
-  
-        foodNameDisplay.textContent = currentFood.name;
-        foodPriceDisplay.textContent = currentFood.price;
-        foodImageDisplay.src = currentFood.image;
-  
-     
-        menuSection.classList.add('blurred');
-        foodSelectionModal.style.display = 'flex';
-        overlay.style.display = 'block';
-      });
-    });
-  
+let cart = [];
+let paymentDetails = {
+    method: '',
+    cashAmount: 0,
+    change: 0
+};
 
-    overlay.addEventListener('click', () => {
-      foodSelectionModal.style.display = 'none';
-      paymentMethodModal.style.display = 'none';
-      reviewModal.style.display = 'none';
-      overlay.style.display = 'none';
-      
-    
-      menuSection.classList.remove('blurred');
-    });
-  
-  
-    addPaymentBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      foodSelectionModal.style.display = 'none';
-      paymentMethodModal.style.display = 'flex';
-    });
-  
-   
-    paymentMethodSelect.addEventListener('change', () => {
-      const method = paymentMethodSelect.value;
-      if (method === 'cash') {
-        paymentInputsContainer.innerHTML = `
-          <label for="cash-amount">Amount</label>
-          <input type="number" id="cash-amount" required>
+function selectItem(button) {
+    const card = button.closest('.menu-card');
+
+    const selectedFood = {
+        name: card.querySelector('.menu-name').textContent,
+        price: card.querySelector('.menu-price').textContent,
+        image: card.querySelector('img').src,
+        size: 'Regular',
+        quantity: 1,
+    };
+
+    cart.push(selectedFood);
+
+    card.style.padding = '10px';
+    card.style.border = '2px solid green';
+
+    alert(`${selectedFood.name} has been added to your cart!`);
+}
+
+function showCart() {
+    if (cart.length === 0) {
+        alert("No items selected yet!");
+        return;
+    }
+
+    foodOrderSummary.innerHTML = '';
+
+    cart.forEach((food, index) => {
+        foodOrderSummary.innerHTML += `
+            <li>
+                <img src="${food.image}" alt="${food.name}" width="50" height="50">
+                <strong>${food.name}</strong> - ${food.price}
+                <br>Size:
+                <select onchange="updateItemDetails(${index}, 'size', this.value)" required>
+                    <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
+                    <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
+                    <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
+                </select>
+                <br>Quantity:
+                <input type="number" value="${food.quantity}" min="1" onchange="updateItemDetails(${index}, 'quantity', this.value)" required>
+                <br><button type="button" onclick="removeItem(${index})">Remove</button>
+            </li>
         `;
-      } else {
+    });
+
+    menuSection.classList.add('blurred');
+    foodSelectionModal.style.display = 'flex';
+    overlay.style.display = 'block';
+}
+
+function updateItemDetails(index, field, value) {
+    cart[index][field] = value;
+    showCart();
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    showCart();
+}
+
+overlay.addEventListener('click', () => {
+    foodSelectionModal.style.display = 'none';
+    paymentMethodModal.style.display = 'none';
+    reviewModal.style.display = 'none';
+    overlay.style.display = 'none';
+    menuSection.classList.remove('blurred');
+});
+
+addPaymentBtn.addEventListener('click', (e) => {
+    const fullName = fullNameInput.value;
+
+    if (!fullName) {
+        alert("Full Name is required.");
+        setTimeout(() => {
+            fullNameInput.focus();
+        }, 10);
+        e.preventDefault();
+        return;
+    }
+
+    foodSelectionModal.style.display = 'none';
+    paymentMethodModal.style.display = 'flex';
+});
+
+paymentMethodSelect.addEventListener('change', () => {
+    const method = paymentMethodSelect.value;
+    paymentInputsContainer.innerHTML = ''; // Clear previous inputs
+
+    if (method === 'cash') {
         paymentInputsContainer.innerHTML = `
-          <label for="payment-username">Username</label>
-          <input type="text" id="payment-username" required>
-          <label for="payment-phone">Phone Number</label>
-          <input type="tel" id="payment-phone" required>
+            <label for="cash-amount">Amount</label>
+            <input type="number" id="cash-amount" required>
+            <div id="change-container" style="display:none;">
+                <label for="change">Change</label>
+                <input type="text" id="change" disabled>
+            </div>
         `;
-      }
+    } else if (method === 'gcash' || method === 'paymaya') {
+        paymentInputsContainer.innerHTML = `
+            <label for="payment-username">Username</label>
+            <input type="text" id="payment-username" required>
+            <label for="payment-phone">Phone Number</label>
+            <input type="tel" id="payment-phone" required>
+        `;
+    }
+});
+
+orderNowBtn.addEventListener('click', () => {
+    const fullName = fullNameInput.value;
+
+    if (!fullName) {
+        alert("Full Name is required.");
+        setTimeout(() => {
+            fullNameInput.focus();
+        }, 10);
+        return;
+    }
+
+    for (let food of cart) {
+        if (!food.size) {
+            alert("All items must have a size selected.");
+            return;
+        }
+        if (food.quantity <= 0) {
+            alert("Quantity must be greater than 0 for all items.");
+            return;
+        }
+    }
+
+    if (!paymentMethodSelect.value) {
+        alert("Please select a payment method.");
+        return;
+    }
+
+    paymentDetails.method = paymentMethodSelect.value;
+    paymentDetails.cashAmount = 0;
+    paymentDetails.change = 0;
+
+    if (paymentMethodSelect.value === 'gcash' || paymentMethodSelect.value === 'paymaya') {
+        const username = document.getElementById('payment-username')?.value;
+        const phone = document.getElementById('payment-phone')?.value;
+
+        if (!username || !phone) {
+            alert("Payment username and phone number are required for " + paymentMethodSelect.value + ".");
+            return;
+        }
+    } else if (paymentMethodSelect.value === 'cash') {
+        const cashAmountInput = document.getElementById('cash-amount');
+        if (!cashAmountInput) {
+            alert("Cash amount input not found.");
+            return;
+        }
+        const cashAmount = parseFloat(cashAmountInput.value);
+
+        if (isNaN(cashAmount) || cashAmount <= 0) {
+            alert("Cash amount is required and must be greater than 0.");
+            return;
+        }
+
+        let total = 0;
+        cart.forEach(food => {
+            total += parseFloat(food.price.replace('$', '')) * food.quantity;
+        });
+
+        if (cashAmount > total) {
+            const change = cashAmount - total;
+            document.getElementById('change').value = `$${change.toFixed(2)}`;
+            document.getElementById('change-container').style.display = 'block';
+            paymentDetails.change = change;
+        }
+        paymentDetails.cashAmount = cashAmount;
+    }
+
+    let total = 0;
+    cart.forEach(food => {
+        total += parseFloat(food.price.replace('$', '')) * food.quantity;
     });
-  
-    orderNowBtn.addEventListener('click', () => {
-      paymentMethodModal.style.display = 'none';
-      reviewModal.style.display = 'flex';
-  
-      const size = document.getElementById('size').value;
-      const quantity = document.getElementById('quantity').value;
-      const fullName = document.getElementById('full-name').value;
-      const age = document.getElementById('age').value;
-  
-      foodOrderSummary.innerHTML = `
-        <li>Name: ${fullName}</li>
-        <li>Age: ${age}</li>
-        <li>Food: ${currentFood.name}</li>
-        <li>Size: ${size}</li>
-        <li>Quantity: ${quantity}</li>
-        <li>Total Price: $${(parseFloat(currentFood.price.replace('$', '')) * quantity).toFixed(2)}</li>
-        <li>Payment Method: ${paymentMethodSelect.value}</li>
-      `;
-    });
-  
-    confirmBtn.addEventListener('click', () => {
-      alert("Your order has been confirmed!");
-      reviewModal.style.display = 'none';
-      overlay.style.display = 'none';
-      
-      
-      menuSection.classList.remove('blurred');
-    });
-  </script>
-  
+
+    foodOrderSummary.innerHTML = `
+        <li>Full Name: ${fullName}</li>
+        <li>Items:</li>
+        <ul>
+            ${cart.map(item => `
+                <li>
+                    <img src="${item.image}" alt="${item.name}" width="50" height="50">
+                    ${item.name} - ${item.price} | Size: ${item.size} | Quantity: ${item.quantity}
+                </li>
+            `).join('')}
+        </ul>
+        <li><strong>Total Price: $${total.toFixed(2)}</strong></li>
+        <li>Payment Method: ${paymentDetails.method}</li>
+        ${paymentDetails.method === 'cash' ? `<li>Amount Paid: $${paymentDetails.cashAmount.toFixed(2)}</li>` : ''}
+        ${paymentDetails.method === 'cash' && paymentDetails.change > 0 ? `<li>Change: $${paymentDetails.change.toFixed(2)}</li>` : ''}
+    `;
+
+    paymentMethodModal.style.display = 'none';
+    reviewModal.style.display = 'flex';
+});
+
+confirmBtn.addEventListener('click', () => {
+    alert("Your order has been confirmed!");
+    cart = [];
+    reviewModal.style.display = 'none';
+    overlay.style.display = 'none';
+    menuSection.classList.remove('blurred');
+    // Optionally, you can reset the form and other UI elements here
+    if (fullNameInput) {
+        fullNameInput.value = '';
+    }
+    if (paymentInputsContainer) {
+        paymentInputsContainer.innerHTML = '';
+    }
+    if (paymentMethodSelect) {
+        paymentMethodSelect.value = ''; // Reset payment method
+    }
+});
+</script> 
 </body>
 </html>
