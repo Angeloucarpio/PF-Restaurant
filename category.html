@@ -561,6 +561,7 @@ const paymentInputsContainer = document.getElementById('payment-inputs');
 const orderNowBtn = document.getElementById('order-now-btn');
 const confirmBtn = document.getElementById('confirm-btn');
 const fullNameInput = document.getElementById('full-name');
+const foodDetailsContainer = document.getElementById('food-details');
 
 let cart = [];
 let paymentDetails = {
@@ -580,7 +581,13 @@ function selectItem(button) {
         quantity: 1,
     };
 
-    cart.push(selectedFood);
+    // Check if the item is already in the cart, if so, increment quantity
+    const existingItemIndex = cart.findIndex(item => item.name === selectedFood.name);
+    if (existingItemIndex > -1) {
+        cart[existingItemIndex].quantity++;
+    } else {
+        cart.push(selectedFood);
+    }
 
     card.style.padding = '10px';
     card.style.border = '2px solid green';
@@ -594,22 +601,39 @@ function showCart() {
         return;
     }
 
-    foodOrderSummary.innerHTML = '';
+    foodDetailsContainer.innerHTML = ''; // Clear previous details
 
+    cart.forEach((food, index) => {
+        foodDetailsContainer.innerHTML += `
+            <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; align-items: center;">
+                <img src="${food.image}" alt="${food.name}" width="80" height="80" style="margin-right: 10px; border-radius: 4px;">
+                <div>
+                    <h3>${food.name}</h3>
+                    <p>Price: ${food.price}</p>
+                    <label for="size-${index}">Size:</label>
+                    <select id="size-${index}" onchange="updateItemDetails(${index}, 'size', this.value)" required>
+                        <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
+                        <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
+                        <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
+                    </select>
+                    <br>
+                    <label for="quantity-${index}">Quantity:</label>
+                    <input type="number" id="quantity-${index}" value="${food.quantity}" min="1" onchange="updateItemDetails(${index}, 'quantity', this.value)" style="width: 60px;">
+                    <br>
+                    <button type="button" onclick="removeItem(${index})">Remove</button>
+                </div>
+            </div>
+        `;
+    });
+
+    foodOrderSummary.innerHTML = ''; // Clear review summary initially
     cart.forEach((food, index) => {
         foodOrderSummary.innerHTML += `
             <li>
                 <img src="${food.image}" alt="${food.name}" width="50" height="50">
                 <strong>${food.name}</strong> - ${food.price}
-                <br>Size:
-                <select onchange="updateItemDetails(${index}, 'size', this.value)" required>
-                    <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
-                    <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
-                    <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
-                </select>
-                <br>Quantity:
-                <input type="number" value="${food.quantity}" min="1" onchange="updateItemDetails(${index}, 'quantity', this.value)" required>
-                <br><button type="button" onclick="removeItem(${index})">Remove</button>
+                <br>Size: ${food.size}
+                <br>Quantity: ${food.quantity}
             </li>
         `;
     });
