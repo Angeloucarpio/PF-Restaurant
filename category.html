@@ -548,7 +548,7 @@ button:hover {
 <button onclick="showCart(this)">Get Order</button>
 
   <div id="overlay"></div>
-<script>
+  <script>
 const foodCategoryCards = document.querySelectorAll('.menu-card');
 const foodSelectionModal = document.getElementById('food-selection-modal');
 const paymentMethodModal = document.getElementById('payment-method-modal');
@@ -735,6 +735,12 @@ orderNowBtn.addEventListener('click', () => {
             alert("Enter valid cash amount.");
             return;
         }
+
+        if (cashAmount < total) {
+            alert(`The cash amount is insufficient. You need at least $${total.toFixed(2)}.`);
+            return;
+        }
+
         if (cashAmount > total) {
             let change = cashAmount - total;
             document.getElementById('change').value = `$${change.toFixed(2)}`;
@@ -790,7 +796,18 @@ confirmBtn.addEventListener('click', () => {
     localStorage.setItem('orderHistory', JSON.stringify(history));
 
     alert("Order confirmed!");
+    
+    // Clear the cart and reset item styles after order confirmation
     cart = [];
+    foodCategoryCards.forEach(card => {
+        const button = card.querySelector('button');
+        card.style.padding = '';
+        card.style.border = '';
+        button.textContent = 'Add to Cart';
+        button.style.backgroundColor = '';
+        button.style.color = '';
+    });
+
     reviewModal.style.display = 'none';
     overlay.style.display = 'none';
     menuSection.classList.remove('blurred');
@@ -802,7 +819,25 @@ confirmBtn.addEventListener('click', () => {
 
 function showOrderHistory() {
     const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    orderHistoryList.innerHTML = history.map((order, index) => {
+    const currentTime = new Date().getTime();  // Get current time in milliseconds
+
+    // Filter out orders that were marked as 'Received' and are older than 10 seconds
+    const filteredHistory = history.filter(order => {
+        if (order.status === 'Received') {
+            const orderTime = new Date(order.timestamp).getTime(); // Convert timestamp to milliseconds
+            const timeDiff = currentTime - orderTime;
+            if (timeDiff > 10000) {  // If more than 10 seconds have passed
+                return false;  // Remove the order from history
+            }
+        }
+        return true;  // Keep the order if it doesn't meet the criteria
+    });
+
+    // Update the order history in localStorage
+    localStorage.setItem('orderHistory', JSON.stringify(filteredHistory));
+
+    // Render the updated order history
+    orderHistoryList.innerHTML = filteredHistory.map((order, index) => {
         const itemList = order.items.map(item => `
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
                 <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
@@ -829,15 +864,97 @@ function showOrderHistory() {
                 <div><strong>Total:</strong> $${order.total}</div>
                 <button 
                     onclick="toggleOrderStatus(${index})"
-                    style="
-                        margin-top: 5px;
+                    style="margin-top: 5px;
                         padding: 5px 12px;
                         background-color: ${statusColors[status]};
                         color: white;
                         border: none;
                         border-radius: 5px;
-                        cursor: pointer;
-                    ">
+                        cursor: pointer;">
+                    ${status}
+                </button>
+                <br><small>${order.timestamp}</small>
+            </li>
+        `;
+    }).join('');
+
+    orderHistoryModal.style.display = 'block';
+}
+
+// Function to toggle the status of an order and show "Received" for 10 seconds
+function toggleOrderStatus(index) {
+    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
+    const currentStatus = history[index].status || 'On Process';
+    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+
+    // Set the new status
+    history[index].status = statuses[nextIndex];
+    localStorage.setItem('orderHistory', JSON.stringify(history));
+
+    // If the status is 'Received', show the text for 10 seconds, then remove the order
+    if (statuses[nextIndex] === 'Received') {
+        // Add the text to the order history temporarily
+        const orderElement = document.querySelector(`#order-${index}`);
+        if (orderElement) {
+            const receivedText = document.createElement('span');
+            receivedText.textContent = 'Received';
+            receivedText.style.color = 'green';  // You can customize this style
+            orderElement.appendChild(receivedText);
+        }
+
+        // After 10 seconds, remove the order from the local storage and the UI
+        setTimeout(() => {
+            // Remove the order from the local storage
+            history.splice(index, 1);
+            localStorage.setItem('orderHistory', JSON.stringify(history));
+
+            // Re-render the order history
+            showOrderHistory();
+        }, 10000);  // 10 seconds
+    }
+
+    // Update the UI to reflect changes
+    showOrderHistory();
+}
+
+// Function to show the order history
+function showOrderHistory() {
+    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    orderHistoryList.innerHTML = history.map((order, index) => {
+        const itemList = order.items.map(item => `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                <div>
+                    <strong>${item.name}</strong> x${item.quantity} <br>
+                    <small>$${item.price} each</small>
+                </div>
+            </div>
+        `).join('');
+
+        const status = order.status || 'On Process';
+        const statusColors = {
+            'On Process': '#007BFF',
+            'Pending': '#FFA500',
+            'Delivered': '#28a745',
+            'Received': '#6c757d'
+        };
+
+        return `
+            <li id="order-${index}" style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
+                <strong>${order.fullName}</strong><br>
+                <em>Dine Option: ${order.dineOption || 'N/A'}</em>
+                ${itemList}
+                <div><strong>Total:</strong> $${order.total}</div>
+                <button 
+                    onclick="toggleOrderStatus(${index})"
+                    style="margin-top: 5px;
+                        padding: 5px 12px;
+                        background-color: ${statusColors[status]};
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;">
                     ${status}
                 </button>
                 <br><small>${order.timestamp}</small>
@@ -862,7 +979,6 @@ document.getElementById('close-history-btn').addEventListener('click', function 
     orderHistoryModal.style.display = 'none';
 });
 </script>
-
 
 </body>
 </html>
