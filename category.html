@@ -500,16 +500,24 @@ button:hover {
 </div>
   </section>
  <section id="food-selection-modal" class="modal">
-    <div id="food-selection-container" class="food-selection-container">
-        <div id="food-details">
-            </div>
-        <form id="food-order-form">
-            <label for="full-name">Full Name:</label>
-            <input type="text" id="full-name" required>
-
-            <button type="button" id="add-payment-btn">Add Payment</button>
-        </form>
+  <div id="food-selection-container" class="food-selection-container">
+    <div id="food-details">
     </div>
+
+    <form id="food-order-form">
+      <label for="full-name">Full Name:</label>
+      <input type="text" id="full-name" required>
+
+      <label for="dine-option">Dine Option:</label>
+      <select id="dine-option" required>
+        <option value="">Select</option>
+        <option value="Take in">Take in</option>
+        <option value="Take out">Take out</option>
+      </select>
+
+      <button type="button" id="add-payment-btn">Add Payment</button>
+    </form>
+  </div>
 </section>
 
 <section id="payment-method-modal" class="modal">
@@ -555,9 +563,7 @@ const paymentInputsContainer = document.getElementById('payment-inputs');
 const orderNowBtn = document.getElementById('order-now-btn');
 const confirmBtn = document.getElementById('confirm-btn');
 const fullNameInput = document.getElementById('full-name');
-const ageInput = document.getElementById('age');
-const sizeSelect = document.getElementById('size');
-const quantityInput = document.getElementById('quantity');
+const dineOptionSelect = document.getElementById('dine-option');
 const foodDetailsContainer = document.getElementById('food-details');
 const orderHistoryModal = document.getElementById('order-history-modal');
 const orderHistoryList = document.getElementById('order-history-list');
@@ -586,23 +592,15 @@ function selectItem(button) {
         cart.push(selectedFood);
     }
 
-    // Change the card styling
+    // Update styles
     card.style.padding = '10px';
     card.style.border = '2px solid green';
-
-    // Change button text and color
-    button.textContent = 'Selected';  // Change button text to 'Selected'
-    button.style.backgroundColor = 'green';  // Change button background to green
-    button.style.color = 'white';  // Change text color to white
-
-    // If the button is red (in case there's a class or style for it), change it to green
-    if (button.style.backgroundColor === 'red') {
-        button.style.backgroundColor = 'green';
-    }
+    button.textContent = 'Selected';
+    button.style.backgroundColor = 'green';
+    button.style.color = 'white';
 
     alert(`${selectedFood.name} has been added to your cart!`);
 }
-
 
 function showCart() {
     if (cart.length === 0) {
@@ -665,6 +663,13 @@ addPaymentBtn.addEventListener('click', (e) => {
         return;
     }
 
+    if (!dineOptionSelect.value) {
+        alert("Please select a dine option.");
+        dineOptionSelect.focus();
+        e.preventDefault();
+        return;
+    }
+
     foodSelectionModal.style.display = 'none';
     paymentMethodModal.style.display = 'flex';
 });
@@ -694,9 +699,17 @@ paymentMethodSelect.addEventListener('change', () => {
 
 orderNowBtn.addEventListener('click', () => {
     const fullName = fullNameInput.value;
+    const dineOption = dineOptionSelect.value;
+
     if (!fullName) {
         alert("Full Name is required.");
         fullNameInput.focus();
+        return;
+    }
+
+    if (!dineOption) {
+        alert("Please select a dine option.");
+        dineOptionSelect.focus();
         return;
     }
 
@@ -740,6 +753,7 @@ orderNowBtn.addEventListener('click', () => {
 
     foodOrderSummary.innerHTML = `
         <li><strong>Full Name:</strong> ${fullName}</li>
+        <li><strong>Dine Option:</strong> ${dineOption}</li>
         <li><strong>Items:</strong></li>
         <ul>
             ${cart.map(item => `
@@ -759,10 +773,12 @@ orderNowBtn.addEventListener('click', () => {
 
 confirmBtn.addEventListener('click', () => {
     const fullName = fullNameInput.value;
+    const dineOption = dineOptionSelect.value;
     let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')) * item.quantity, 0);
 
     const newOrder = {
         fullName,
+        dineOption,
         items: cart,
         total: total.toFixed(2),
         paymentMethod: paymentDetails.method,
@@ -779,75 +795,74 @@ confirmBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
     menuSection.classList.remove('blurred');
     fullNameInput.value = '';
+    dineOptionSelect.value = '';
     paymentInputsContainer.innerHTML = '';
     paymentMethodSelect.value = '';
 });
+
 function showOrderHistory() {
-  const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-  const orderHistoryList = document.getElementById('order-history-list');
+    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    orderHistoryList.innerHTML = history.map((order, index) => {
+        const itemList = order.items.map(item => `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                <div>
+                    <strong>${item.name}</strong> x${item.quantity} <br>
+                    <small>$${item.price} each</small>
+                </div>
+            </div>
+        `).join('');
 
-  orderHistoryList.innerHTML = history.map((order, index) => {
-    const itemList = order.items.map(item => `
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-        <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
-        <div>
-          <strong>${item.name}</strong> x${item.quantity} <br>
-          <small>$${item.price} each</small>
-        </div>
-      </div>
-    `).join('');
+        const status = order.status || 'On Process';
+        const statusColors = {
+            'On Process': '#007BFF',
+            'Pending': '#FFA500',
+            'Delivered': '#28a745',
+            'Received': '#6c757d'
+        };
 
-    const status = order.status || 'On Process';
-    const statusColors = {
-      'On Process': '#007BFF',
-      'Pending': '#FFA500',
-      'Delivered': '#28a745',
-      'Received': '#6c757d'
-    };
+        return `
+            <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
+                <strong>${order.fullName}</strong><br>
+                <em>Dine Option: ${order.dineOption || 'N/A'}</em>
+                ${itemList}
+                <div><strong>Total:</strong> $${order.total}</div>
+                <button 
+                    onclick="toggleOrderStatus(${index})"
+                    style="
+                        margin-top: 5px;
+                        padding: 5px 12px;
+                        background-color: ${statusColors[status]};
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    ">
+                    ${status}
+                </button>
+                <br><small>${order.timestamp}</small>
+            </li>
+        `;
+    }).join('');
 
-    return `
-      <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
-        <strong>${order.fullName}</strong><br>
-        ${itemList}
-        <div><strong>Total:</strong> $${order.total}</div>
-        <button 
-          onclick="toggleOrderStatus(${index})"
-          style="
-            margin-top: 5px;
-            padding: 5px 12px;
-            background-color: ${statusColors[status]};
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          ">
-          ${status}
-        </button>
-        <br><small>${order.timestamp}</small>
-      </li>
-    `;
-  }).join('');
-
-  document.getElementById('order-history-modal').style.display = 'block';
+    orderHistoryModal.style.display = 'block';
 }
 
-// Toggle order status through predefined steps
 function toggleOrderStatus(index) {
-  const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-  const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
-  const currentStatus = history[index].status || 'On Process';
-  const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
-  history[index].status = statuses[nextIndex];
-  localStorage.setItem('orderHistory', JSON.stringify(history));
-  showOrderHistory(); // Re-render
+    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
+    const currentStatus = history[index].status || 'On Process';
+    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+    history[index].status = statuses[nextIndex];
+    localStorage.setItem('orderHistory', JSON.stringify(history));
+    showOrderHistory();
 }
 
-// Close modal
 document.getElementById('close-history-btn').addEventListener('click', function () {
-  document.getElementById('order-history-modal').style.display = 'none';
+    orderHistoryModal.style.display = 'none';
 });
-
 </script>
+
 
 </body>
 </html>
