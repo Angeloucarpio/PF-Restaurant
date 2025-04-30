@@ -256,7 +256,7 @@ nav a {
       <div class="hero-text">
         <h1>It’s not just Food, It’s an Experience.</h1>
         <div class="buttons">
-          <button class="view-menu" id="view-history-btn">View Menu</button>
+          <button onclick="showOrderHistory()" style="z-index: 10001;">Order History</button>
           <button class="book-table" id="book-table-btn">Book A Table</button>
         </div>
         <div class="reviews">
@@ -454,6 +454,38 @@ confirmBtn.addEventListener('click', () => {
   alert('Order confirmed! Thank you!');
   closeModals();
 });
+function showOrderHistory() {
+  const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+  const orderHistoryList = document.getElementById('order-history-list');
+
+  orderHistoryList.innerHTML = history.map(order => {
+    const itemList = order.items.map(item => `
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+        <div>
+          <strong>${item.name}</strong> x${item.quantity} <br>
+          <small>$${item.price} each</small>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
+        <strong>${order.fullName}</strong><br>
+        ${itemList}
+        <div><strong>Total:</strong> $${order.total}</div>
+        <small>${order.timestamp}</small>
+      </li>
+    `;
+  }).join('');
+
+  document.getElementById('order-history-modal').style.display = 'block';
+}
+
+document.getElementById('close-history-btn').addEventListener('click', function () {
+  document.getElementById('order-history-modal').style.display = 'none';
+});
+
   </script>  
 </body>
 </html>
