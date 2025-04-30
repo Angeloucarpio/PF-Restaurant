@@ -774,7 +774,7 @@ function showOrderHistory() {
   const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
   const orderHistoryList = document.getElementById('order-history-list');
 
-  orderHistoryList.innerHTML = history.map(order => {
+  orderHistoryList.innerHTML = history.map((order, index) => {
     const itemList = order.items.map(item => `
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
         <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
@@ -785,11 +785,29 @@ function showOrderHistory() {
       </div>
     `).join('');
 
+    const currentStatus = order.status || 'On Process';
+    const statusOptions = ['On Process', 'Pending', 'Delivered', 'Received'];
+    const statusButtons = statusOptions.map(status => `
+      <button onclick="updateOrderStatus(${index}, '${status}')" 
+        style="
+          margin-right: 5px;
+          padding: 4px 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          background-color: ${status === currentStatus ? '#007BFF' : '#e0e0e0'};
+          color: ${status === currentStatus ? '#fff' : '#000'};
+        ">
+        ${status}
+      </button>
+    `).join('');
+
     return `
       <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
         <strong>${order.fullName}</strong><br>
         ${itemList}
         <div><strong>Total:</strong> $${order.total}</div>
+        <div style="margin-top: 5px;"><strong>Status:</strong> ${statusButtons}</div>
         <small>${order.timestamp}</small>
       </li>
     `;
@@ -798,6 +816,15 @@ function showOrderHistory() {
   document.getElementById('order-history-modal').style.display = 'block';
 }
 
+// Function to update the order status
+function updateOrderStatus(index, newStatus) {
+  const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+  history[index].status = newStatus;
+  localStorage.setItem('orderHistory', JSON.stringify(history));
+  showOrderHistory(); // Refresh display
+}
+
+// Close modal
 document.getElementById('close-history-btn').addEventListener('click', function () {
   document.getElementById('order-history-modal').style.display = 'none';
 });
