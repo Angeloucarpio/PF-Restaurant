@@ -881,44 +881,70 @@ function showOrderHistory() {
     orderHistoryModal.style.display = 'block';
 }
 
-// Function to toggle the status of an order and show "Received" for 10 seconds
+
 function toggleOrderStatus(index) {
     const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
     const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
     const currentStatus = history[index].status || 'On Process';
     const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
 
-    // Set the new status
+ 
     history[index].status = statuses[nextIndex];
     localStorage.setItem('orderHistory', JSON.stringify(history));
 
-    // If the status is 'Received', show the text for 10 seconds, then remove the order
+   
     if (statuses[nextIndex] === 'Received') {
-        // Add the text to the order history temporarily
+       
         const orderElement = document.querySelector(`#order-${index}`);
         if (orderElement) {
             const receivedText = document.createElement('span');
             receivedText.textContent = 'Received';
-            receivedText.style.color = 'green';  // You can customize this style
+            receivedText.style.color = 'green';  
             orderElement.appendChild(receivedText);
         }
 
-        // After 10 seconds, remove the order from the local storage and the UI
+        
         setTimeout(() => {
-            // Remove the order from the local storage
+           
             history.splice(index, 1);
             localStorage.setItem('orderHistory', JSON.stringify(history));
 
-            // Re-render the order history
+            
             showOrderHistory();
-        }, 10000);  // 10 seconds
+        }, 10000); 
     }
 
-    // Update the UI to reflect changes
+  
+    showOrderHistory();
+}
+function toggleOrderStatus(index) {
+    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
+    const currentStatus = history[index].status || 'On Process';
+    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+
+    history[index].status = statuses[nextIndex];
+    localStorage.setItem('orderHistory', JSON.stringify(history));
+
+    if (statuses[nextIndex] === 'Received') {
+        const orderElement = document.querySelector(`#order-${index}`);
+        if (orderElement) {
+            const receivedText = document.createElement('span');
+            receivedText.textContent = ' Received';
+            receivedText.style.color = 'green';
+            orderElement.appendChild(receivedText);
+        }
+
+        setTimeout(() => {
+            history.splice(index, 1);
+            localStorage.setItem('orderHistory', JSON.stringify(history));
+            showOrderHistory();
+        }, 10000);
+    }
+
     showOrderHistory();
 }
 
-// Function to show the order history
 function showOrderHistory() {
     const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
     orderHistoryList.innerHTML = history.map((order, index) => {
@@ -965,15 +991,6 @@ function showOrderHistory() {
     orderHistoryModal.style.display = 'block';
 }
 
-function toggleOrderStatus(index) {
-    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
-    const currentStatus = history[index].status || 'On Process';
-    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
-    history[index].status = statuses[nextIndex];
-    localStorage.setItem('orderHistory', JSON.stringify(history));
-    showOrderHistory();
-}
 
 document.getElementById('close-history-btn').addEventListener('click', function () {
     orderHistoryModal.style.display = 'none';
