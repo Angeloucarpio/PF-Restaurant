@@ -462,7 +462,7 @@ function showOrderHistory() {
   const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
   const orderHistoryList = document.getElementById('order-history-list');
 
-  orderHistoryList.innerHTML = history.map(order => {
+  orderHistoryList.innerHTML = history.map((order, index) => {
     const itemList = order.items.map(item => `
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
         <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
@@ -473,12 +473,33 @@ function showOrderHistory() {
       </div>
     `).join('');
 
+    const status = order.status || 'On Process';
+    const statusColors = {
+      'On Process': '#007BFF',
+      'Pending': '#FFA500',
+      'Delivered': '#28a745',
+      'Received': '#6c757d'
+    };
+
     return `
       <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
         <strong>${order.fullName}</strong><br>
         ${itemList}
         <div><strong>Total:</strong> $${order.total}</div>
-        <small>${order.timestamp}</small>
+        <button 
+          onclick="toggleOrderStatus(${index})"
+          style="
+            margin-top: 5px;
+            padding: 5px 12px;
+            background-color: ${statusColors[status]};
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          ">
+          ${status}
+        </button>
+        <br><small>${order.timestamp}</small>
       </li>
     `;
   }).join('');
@@ -486,6 +507,18 @@ function showOrderHistory() {
   document.getElementById('order-history-modal').style.display = 'block';
 }
 
+// Toggle order status through predefined steps
+function toggleOrderStatus(index) {
+  const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+  const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
+  const currentStatus = history[index].status || 'On Process';
+  const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+  history[index].status = statuses[nextIndex];
+  localStorage.setItem('orderHistory', JSON.stringify(history));
+  showOrderHistory(); // Re-render
+}
+
+// Close modal
 document.getElementById('close-history-btn').addEventListener('click', function () {
   document.getElementById('order-history-modal').style.display = 'none';
 });
