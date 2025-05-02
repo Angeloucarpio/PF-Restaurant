@@ -592,7 +592,7 @@ function selectItem(button) {
         cart.push(selectedFood);
     }
 
-    // Update styles
+   
     card.style.padding = '10px';
     card.style.border = '2px solid green';
     button.textContent = 'Selected';
@@ -608,28 +608,54 @@ function showCart() {
         return;
     }
 
+    
     foodDetailsContainer.innerHTML = '';
+    const scrollWrapper = document.createElement('div');
+    scrollWrapper.style.display = 'flex';  
+    scrollWrapper.style.overflowX = 'auto'; 
+    scrollWrapper.style.paddingBottom = '10px';
+
+    
     cart.forEach((food, index) => {
-        foodDetailsContainer.innerHTML += `
-            <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; align-items: center;">
-                <img src="${food.image}" alt="${food.name}" width="80" height="80" style="margin-right: 10px; border-radius: 4px;">
-                <div>
-                    <h3>${food.name}</h3>
-                    <p>Price: ₱${food.price}</p>
-                    <label>Size:</label>
-                    <select onchange="updateItemDetails(${index}, 'size', this.value)">
-                        <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
-                        <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
-                        <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
-                    </select>
-                    <br>
-                    <label>Quantity:</label>
-                    <input type="number" value="${food.quantity}" min="1" onchange="updateItemDetails(${index}, 'quantity', this.value)">
-                    <br>
-                    <button onclick="removeItem(${index})">Remove</button>
-                </div>
+        const foodItem = document.createElement('div');
+        foodItem.style.marginRight = '15px'; 
+        foodItem.style.borderBottom = '1px solid #eee'; 
+        foodItem.style.paddingBottom = '10px';  
+        foodItem.style.width = '300px';
+        foodItem.style.display = 'flex';
+        foodItem.style.alignItems = 'center';
+
+        foodItem.innerHTML = `
+            <img src="${food.image}" alt="${food.name}" width="80" height="80" style="margin-right: 10px; border-radius: 4px;">
+            <div>
+                <h3>${food.name}</h3>
+                <p>Price: ₱${food.price}</p>
+                <label>Size:</label>
+                <select onchange="updateItemDetails(${index}, 'size', this.value)">
+                    <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
+                    <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
+                    <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
+                </select>
+                <br>
+                <label>Quantity:</label>
+                <input type="number" value="${food.quantity}" min="1" onchange="updateItemDetails(${index}, 'quantity', this.value)">
+                <br>
+                <button class="remove-btn" data-index="${index}">Remove</button>
             </div>
         `;
+        scrollWrapper.appendChild(foodItem); 
+    });
+
+  
+    foodDetailsContainer.appendChild(scrollWrapper);
+
+ 
+    const removeButtons = document.querySelectorAll('.remove-btn');
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            removeItem(index);
+        });
     });
 
     menuSection.classList.add('blurred');
@@ -637,23 +663,10 @@ function showCart() {
     overlay.style.display = 'block';
 }
 
-function updateItemDetails(index, field, value) {
-    cart[index][field] = value;
-    showCart();
-}
-
 function removeItem(index) {
     cart.splice(index, 1);
     showCart();
 }
-
-overlay.addEventListener('click', () => {
-    foodSelectionModal.style.display = 'none';
-    paymentMethodModal.style.display = 'none';
-    reviewModal.style.display = 'none';
-    overlay.style.display = 'none';
-    menuSection.classList.remove('blurred');
-});
 
 addPaymentBtn.addEventListener('click', (e) => {
     if (!fullNameInput.value) {
