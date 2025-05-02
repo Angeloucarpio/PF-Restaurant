@@ -615,7 +615,7 @@ function showCart() {
                 <img src="${food.image}" alt="${food.name}" width="80" height="80" style="margin-right: 10px; border-radius: 4px;">
                 <div>
                     <h3>${food.name}</h3>
-                    <p>Price: ${food.price}</p>
+                    <p>Price: ₱${food.price}</p>
                     <label>Size:</label>
                     <select onchange="updateItemDetails(${index}, 'size', this.value)">
                         <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
@@ -726,7 +726,7 @@ orderNowBtn.addEventListener('click', () => {
     }
 
     paymentDetails.method = paymentMethodSelect.value;
-    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')) * item.quantity, 0);
+    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('₱', '').replace(',', '')) * item.quantity, 0);
 
     if (paymentDetails.method === 'cash') {
         const cashInput = document.getElementById('cash-amount');
@@ -737,13 +737,13 @@ orderNowBtn.addEventListener('click', () => {
         }
 
         if (cashAmount < total) {
-            alert(`The cash amount is insufficient. You need at least $${total.toFixed(2)}.`);
+            alert(`The cash amount is insufficient. You need at least ₱${total.toFixed(2)}.`);
             return;
         }
 
         if (cashAmount > total) {
             let change = cashAmount - total;
-            document.getElementById('change').value = `$${change.toFixed(2)}`;
+            document.getElementById('change').value = `₱${change.toFixed(2)}`;
             document.getElementById('change-container').style.display = 'block';
             paymentDetails.change = change;
         }
@@ -764,13 +764,13 @@ orderNowBtn.addEventListener('click', () => {
         <ul>
             ${cart.map(item => `
                 <li>
-                    ${item.name} - ${item.price} | Size: ${item.size} | Quantity: ${item.quantity}
+                    ${item.name} - ₱${item.price} | Size: ${item.size} | Quantity: ${item.quantity}
                 </li>`).join('')}
         </ul>
-        <li><strong>Total:</strong> $${total.toFixed(2)}</li>
+        <li><strong>Total:</strong> ₱${total.toFixed(2)}</li>
         <li><strong>Payment Method:</strong> ${paymentDetails.method}</li>
-        ${paymentDetails.method === 'cash' ? `<li>Paid: $${paymentDetails.cashAmount}</li>` : ''}
-        ${paymentDetails.change ? `<li>Change: $${paymentDetails.change.toFixed(2)}</li>` : ''}
+        ${paymentDetails.method === 'cash' ? `<li>Paid: ₱${paymentDetails.cashAmount}</li>` : ''}
+        ${paymentDetails.change ? `<li>Change: ₱${paymentDetails.change.toFixed(2)}</li>` : ''}
     `;
 
     paymentMethodModal.style.display = 'none';
@@ -780,7 +780,7 @@ orderNowBtn.addEventListener('click', () => {
 confirmBtn.addEventListener('click', () => {
     const fullName = fullNameInput.value;
     const dineOption = dineOptionSelect.value;
-    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')) * item.quantity, 0);
+    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('₱', '').replace(',', '')) * item.quantity, 0);
 
     const newOrder = {
         fullName,
@@ -801,20 +801,17 @@ confirmBtn.addEventListener('click', () => {
     cart = [];
     foodCategoryCards.forEach(card => {
         const button = card.querySelector('button');
+        button.textContent = 'Select';
+        button.style.backgroundColor = '#000';
+        button.style.color = '#fff';
         card.style.padding = '';
         card.style.border = '';
-        button.textContent = 'Add to Cart';
-        button.style.backgroundColor = '';
-        button.style.color = '';
     });
 
+    foodSelectionModal.style.display = 'none';
     reviewModal.style.display = 'none';
-    overlay.style.display = 'none';
     menuSection.classList.remove('blurred');
-    fullNameInput.value = '';
-    dineOptionSelect.value = '';
-    paymentInputsContainer.innerHTML = '';
-    paymentMethodSelect.value = '';
+    overlay.style.display = 'none';
 });
 
 function showOrderHistory() {
