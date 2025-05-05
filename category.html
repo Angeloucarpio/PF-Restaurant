@@ -612,7 +612,9 @@ function updateItemDetails(index, type, value) {
     if (cart[index]) {
         if (type === 'size') {
             cart[index].size = value;
-            if (value === 'Large') {
+            if (value === 'Medium') {
+                cart[index].price = cart[index].basePrice * 1.15;
+            } else if (value === 'Large') {
                 cart[index].price = cart[index].basePrice * 1.25;
             } else if (value === 'Extra Large') {
                 cart[index].price = cart[index].basePrice * 1.50;
@@ -666,6 +668,7 @@ function showCart() {
                 <label>Size:</label>
                 <select onchange="updateItemDetails(${index}, 'size', this.value)">
                     <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
+                    <option value="Medium" ${food.size === 'Medium' ? 'selected' : ''}>Medium (+15%)</option>
                     <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large (+25%)</option>
                     <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large (+50%)</option>
                 </select>
@@ -808,7 +811,7 @@ orderNowBtn.addEventListener('click', () => {
         <ul>
             ${cart.map(item => `
                 <li>
-                    ${item.name} - ₱${item.basePrice.toFixed(2)} | Size: ${item.size} ${item.size !== 'Regular' ? `(+${item.size === 'Large' ? '25%' : '50%'})` : ''} | Quantity: ${item.quantity} | Subtotal: ₱${(item.price * item.quantity).toFixed(2)}
+                    ${item.name} - ₱${item.basePrice.toFixed(2)} | Size: ${item.size} ${item.size !== 'Regular' ? `(+${item.size === 'Medium' ? '15%' : (item.size === 'Large' ? '25%' : '50%')})` : ''} | Quantity: ${item.quantity} | Subtotal: ₱${(item.price * item.quantity).toFixed(2)}
                 </li>`).join('')}
         </ul>
         <li><strong>Total:</strong> ₱${total.toFixed(2)}</li>
