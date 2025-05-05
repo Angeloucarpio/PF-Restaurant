@@ -548,7 +548,7 @@ button:hover {
 <button onclick="showCart(this)">Get Order</button>
 
   <div id="overlay"></div>
-  <script>
+ <script>
 const foodCategoryCards = document.querySelectorAll('.menu-card');
 const foodSelectionModal = document.getElementById('food-selection-modal');
 const paymentMethodModal = document.getElementById('payment-method-modal');
@@ -567,6 +567,7 @@ const dineOptionSelect = document.getElementById('dine-option');
 const foodDetailsContainer = document.getElementById('food-details');
 const orderHistoryModal = document.getElementById('order-history-modal');
 const orderHistoryList = document.getElementById('order-history-list');
+const closeHistoryBtn = document.getElementById('close-history-btn');
 
 let cart = [];
 let paymentDetails = {
@@ -577,10 +578,16 @@ let paymentDetails = {
 
 function selectItem(button) {
     const card = button.closest('.menu-card');
+    const name = card.querySelector('.menu-name').textContent;
+    const priceText = card.querySelector('.menu-price').textContent.replace('₱', '').replace(',', '');
+    const image = card.querySelector('img').src;
+    const price = parseFloat(priceText);
+
     const selectedFood = {
-        name: card.querySelector('.menu-name').textContent,
-        price: card.querySelector('.menu-price').textContent,
-        image: card.querySelector('img').src,
+        name: name,
+        basePrice: price,
+        price: price,
+        image: image,
         size: 'Regular',
         quantity: 1,
     };
@@ -592,7 +599,6 @@ function selectItem(button) {
         cart.push(selectedFood);
     }
 
-   
     card.style.padding = '10px';
     card.style.border = '2px solid green';
     button.textContent = 'Selected';
@@ -602,25 +608,52 @@ function selectItem(button) {
     alert(`${selectedFood.name} has been added to your cart!`);
 }
 
+function updateItemDetails(index, type, value) {
+    if (cart[index]) {
+        if (type === 'size') {
+            cart[index].size = value;
+            if (value === 'Large') {
+                cart[index].price = cart[index].basePrice * 1.25;
+            } else if (value === 'Extra Large') {
+                cart[index].price = cart[index].basePrice * 1.50;
+            } else {
+                cart[index].price = cart[index].basePrice;
+            }
+        } else if (type === 'quantity') {
+            const quantity = parseInt(value);
+            if (!isNaN(quantity) && quantity > 0) {
+                cart[index].quantity = quantity;
+            } else {
+                cart[index].quantity = 1;
+                alert("Quantity must be at least 1.");
+                // Optionally reset the input field value here
+                const quantityInput = foodDetailsContainer.querySelector(`div:nth-child(${index + 1}) input[type="number"]`);
+                if (quantityInput) {
+                    quantityInput.value = 1;
+                }
+            }
+        }
+        showCart(); // Re-render the cart display to reflect changes
+    }
+}
+
 function showCart() {
     if (cart.length === 0) {
         alert("No items selected yet!");
         return;
     }
 
-    
     foodDetailsContainer.innerHTML = '';
     const scrollWrapper = document.createElement('div');
-    scrollWrapper.style.display = 'flex';  
-    scrollWrapper.style.overflowX = 'auto'; 
+    scrollWrapper.style.display = 'flex';
+    scrollWrapper.style.overflowX = 'auto';
     scrollWrapper.style.paddingBottom = '10px';
 
-    
     cart.forEach((food, index) => {
         const foodItem = document.createElement('div');
-        foodItem.style.marginRight = '15px'; 
-        foodItem.style.borderBottom = '1px solid #eee'; 
-        foodItem.style.paddingBottom = '10px';  
+        foodItem.style.marginRight = '15px';
+        foodItem.style.borderBottom = '1px solid #eee';
+        foodItem.style.paddingBottom = '10px';
         foodItem.style.width = '300px';
         foodItem.style.display = 'flex';
         foodItem.style.alignItems = 'center';
@@ -629,12 +662,12 @@ function showCart() {
             <img src="${food.image}" alt="${food.name}" width="80" height="80" style="margin-right: 10px; border-radius: 4px;">
             <div>
                 <h3>${food.name}</h3>
-                <p>Price: ₱${food.price}</p>
+                <p>Price: ₱${food.price.toFixed(2)}</p>
                 <label>Size:</label>
                 <select onchange="updateItemDetails(${index}, 'size', this.value)">
                     <option value="Regular" ${food.size === 'Regular' ? 'selected' : ''}>Regular</option>
-                    <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large</option>
-                    <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large</option>
+                    <option value="Large" ${food.size === 'Large' ? 'selected' : ''}>Large (+25%)</option>
+                    <option value="Extra Large" ${food.size === 'Extra Large' ? 'selected' : ''}>Extra Large (+50%)</option>
                 </select>
                 <br>
                 <label>Quantity:</label>
@@ -643,13 +676,11 @@ function showCart() {
                 <button class="remove-btn" data-index="${index}">Remove</button>
             </div>
         `;
-        scrollWrapper.appendChild(foodItem); 
+        scrollWrapper.appendChild(foodItem);
     });
 
-  
     foodDetailsContainer.appendChild(scrollWrapper);
 
- 
     const removeButtons = document.querySelectorAll('.remove-btn');
     removeButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -733,13 +764,13 @@ orderNowBtn.addEventListener('click', () => {
 
     for (let food of cart) {
         if (!food.size || food.quantity <= 0) {
-            alert("Check size and quantity.");
+            alert("Check size and quantity for all items.");
             return;
         }
     }
 
     paymentDetails.method = paymentMethodSelect.value;
-    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('₱', '').replace(',', '')) * item.quantity, 0);
+    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     if (paymentDetails.method === 'cash') {
         const cashInput = document.getElementById('cash-amount');
@@ -777,12 +808,12 @@ orderNowBtn.addEventListener('click', () => {
         <ul>
             ${cart.map(item => `
                 <li>
-                    ${item.name} - ₱${item.price} | Size: ${item.size} | Quantity: ${item.quantity}
+                    ${item.name} - ₱${item.basePrice.toFixed(2)} | Size: ${item.size} ${item.size !== 'Regular' ? `(+${item.size === 'Large' ? '25%' : '50%'})` : ''} | Quantity: ${item.quantity} | Subtotal: ₱${(item.price * item.quantity).toFixed(2)}
                 </li>`).join('')}
         </ul>
         <li><strong>Total:</strong> ₱${total.toFixed(2)}</li>
         <li><strong>Payment Method:</strong> ${paymentDetails.method}</li>
-        ${paymentDetails.method === 'cash' ? `<li>Paid: ₱${paymentDetails.cashAmount}</li>` : ''}
+        ${paymentDetails.method === 'cash' ? `<li>Paid: ₱${paymentDetails.cashAmount.toFixed(2)}</li>` : ''}
         ${paymentDetails.change ? `<li>Change: ₱${paymentDetails.change.toFixed(2)}</li>` : ''}
     `;
 
@@ -793,12 +824,19 @@ orderNowBtn.addEventListener('click', () => {
 confirmBtn.addEventListener('click', () => {
     const fullName = fullNameInput.value;
     const dineOption = dineOptionSelect.value;
-    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('₱', '').replace(',', '')) * item.quantity, 0);
+    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     const newOrder = {
         fullName,
         dineOption,
-        items: cart,
+        items: cart.map(item => ({
+            name: item.name,
+            basePrice: item.basePrice.toFixed(2),
+            price: item.price.toFixed(2),
+            size: item.size,
+            quantity: item.quantity,
+            image: item.image,
+        })),
         total: total.toFixed(2),
         paymentMethod: paymentDetails.method,
         timestamp: new Date().toLocaleString(),
@@ -809,7 +847,7 @@ confirmBtn.addEventListener('click', () => {
     localStorage.setItem('orderHistory', JSON.stringify(history));
 
     alert("Order confirmed!");
-    
+
     // Clear the cart and reset item styles after order confirmation
     cart = [];
     foodCategoryCards.forEach(card => {
@@ -827,106 +865,6 @@ confirmBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
 
-function showOrderHistory() {
-    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    const currentTime = new Date().getTime();  // Get current time in milliseconds
-
-    // Filter out orders that were marked as 'Received' and are older than 10 seconds
-    const filteredHistory = history.filter(order => {
-        if (order.status === 'Received') {
-            const orderTime = new Date(order.timestamp).getTime(); // Convert timestamp to milliseconds
-            const timeDiff = currentTime - orderTime;
-            if (timeDiff > 10000) {  // If more than 10 seconds have passed
-                return false;  // Remove the order from history
-            }
-        }
-        return true;  // Keep the order if it doesn't meet the criteria
-    });
-
-    // Update the order history in localStorage
-    localStorage.setItem('orderHistory', JSON.stringify(filteredHistory));
-
-    // Render the updated order history
-    orderHistoryList.innerHTML = filteredHistory.map((order, index) => {
-        const itemList = order.items.map(item => `
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
-                <div>
-                    <strong>${item.name}</strong> x${item.quantity} <br>
-                    <small>$${item.price} each</small>
-                </div>
-            </div>
-        `).join('');
-
-        const status = order.status || 'On Process';
-        const statusColors = {
-            'On Process': '#007BFF',
-            'Pending': '#FFA500',
-            'Delivered': '#28a745',
-            'Received': '#6c757d'
-        };
-
-        return `
-            <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;">
-                <strong>${order.fullName}</strong><br>
-                <em>Dine Option: ${order.dineOption || 'N/A'}</em>
-                ${itemList}
-                <div><strong>Total:</strong> $${order.total}</div>
-                <button 
-                    onclick="toggleOrderStatus(${index})"
-                    style="margin-top: 5px;
-                        padding: 5px 12px;
-                        background-color: ${statusColors[status]};
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;">
-                    ${status}
-                </button>
-                <br><small>${order.timestamp}</small>
-            </li>
-        `;
-    }).join('');
-
-    orderHistoryModal.style.display = 'block';
-}
-
-
-function toggleOrderStatus(index) {
-    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
-    const currentStatus = history[index].status || 'On Process';
-    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
-
- 
-    history[index].status = statuses[nextIndex];
-    localStorage.setItem('orderHistory', JSON.stringify(history));
-
-   
-    if (statuses[nextIndex] === 'Received') {
-       
-        const orderElement = document.querySelector(`#order-${index}`);
-        if (orderElement) {
-            const receivedText = document.createElement('span');
-            receivedText.textContent = 'Received';
-            receivedText.style.color = 'green';  
-            orderElement.appendChild(receivedText);
-        }
-
-        
-        setTimeout(() => {
-           
-            history.splice(index, 1);
-            localStorage.setItem('orderHistory', JSON.stringify(history));
-
-            
-            showOrderHistory();
-        }, 10000); 
-    }
-
-  
-    showOrderHistory();
-}
 function toggleOrderStatus(index) {
     const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
     const statuses = ['On Process', 'Pending', 'Delivered', 'Received'];
@@ -946,8 +884,9 @@ function toggleOrderStatus(index) {
         }
 
         setTimeout(() => {
-            history.splice(index, 1);
-            localStorage.setItem('orderHistory', JSON.stringify(history));
+            const currentHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            currentHistory.splice(index, 1);
+            localStorage.setItem('orderHistory', JSON.stringify(currentHistory));
             showOrderHistory();
         }, 10000);
     }
@@ -963,7 +902,7 @@ function showOrderHistory() {
                 <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
                 <div>
                     <strong>${item.name}</strong> x${item.quantity} <br>
-                    <small>$${item.price} each</small>
+                    <small>₱${item.price} each</small>
                 </div>
             </div>
         `).join('');
@@ -981,8 +920,8 @@ function showOrderHistory() {
                 <strong>${order.fullName}</strong><br>
                 <em>Dine Option: ${order.dineOption || 'N/A'}</em>
                 ${itemList}
-                <div><strong>Total:</strong> $${order.total}</div>
-                <button 
+                <div><strong>Total:</strong> ₱${order.total}</div>
+                <button
                     onclick="toggleOrderStatus(${index})"
                     style="margin-top: 5px;
                         padding: 5px 12px;
@@ -1001,8 +940,7 @@ function showOrderHistory() {
     orderHistoryModal.style.display = 'block';
 }
 
-
-document.getElementById('close-history-btn').addEventListener('click', function () {
+closeHistoryBtn.addEventListener('click', function () {
     orderHistoryModal.style.display = 'none';
 });
 </script>
